@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>G1 Interface</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('bg.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    label {
+      display: none;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+
+    select {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 8px 16px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #logo {
+      max-width: 100%;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+  <script>
+    $(document).ready(function() {
+      $('#date').datetimepicker({
+        format: 'Y-m-d',
+        timepicker: false
+      });
+
+      $('#start-time, #end-time').datetimepicker({
+        format: 'H:i',
+        datepicker: false,
+        step: 15
+      });
+    });
+
+    function sendMessage() {
+      var date = document.getElementById('date').value;
+      var startTime = document.getElementById('start-time').value;
+      var endTime = document.getElementById('end-time').value;
+      var client = document.getElementById('client').value;
+      var intervenient = document.getElementById('intervenient').value;
+      var furniture = document.getElementById('furniture').value;
+      var remarque = document.getElementById('remarque').value;
+      var isCompleted = document.getElementById('is-completed').checked;
+
+      var message = {
+        date: date,
+        startTime: startTime,
+        endTime: endTime,
+        client: client,
+        intervenient: intervenient,
+        furniture: furniture,
+        remarque: remarque,
+        isCompleted: isCompleted
+      };
+
+      var messages = JSON.parse(localStorage.getItem('messages')) || [];
+      messages.push(message);
+      localStorage.setItem('messages', JSON.stringify(messages));
+
+      // Reset form fields
+      document.getElementById('date').value = '';
+      document.getElementById('start-time').value = '';
+      document.getElementById('end-time').value = '';
+      document.getElementById('client').value = '';
+      document.getElementById('intervenient').value = '';
+      document.getElementById('furniture').value = '';
+      document.getElementById('remarque').value = '';
+      document.getElementById('is-completed').checked = false;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <img id="logo" src="bat.png" alt="Logo">
+    <h1></h1>
+    <input type="text" id="date" placeholder="Date">
+    <br>
+    <input type="text" id="start-time" placeholder="Starting Hour">
+    <br>
+    <input type="text" id="end-time" placeholder="Finishing Hour">
+    <br>
+    <input type="text" id="client" placeholder="Client">
+    <br>
+    <input type="text" id="intervenient" placeholder="Intervenient">
+    <br>
+    <input type="text" id="furniture" placeholder="Furniture">
+    <br>
+    <input type="text" id="remarque" placeholder="Remarque">
+    <br>
+    <label for="is-completed">
+      <input type="checkbox" id="is-completed"> Is the intervention completed?
+    </label>
+    <br>
+    <button onclick="sendMessage()">Send Message</button>
+  </div>
+</body>
+</html>
